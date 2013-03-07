@@ -1,3 +1,11 @@
+% The variables of interest are 
+% falseneg
+% falsepos
+% hammingdist_avg_unsorted
+% hammingdist_var_unsorted
+% hammingdist_avg_sorted
+% hammingdist_var_sorted
+
 
 % load('findingerrors.mat');
 clear;
@@ -8,8 +16,8 @@ cname=char(importdata('compdataname.txt'));
 ctime=(importdata('compdatatime.txt'));
 cstate=(importdata('compdatastate.txt'));
 
-twindow=40;
-clip=3;
+twindow=10;
+clip=2;%Clip number (Change this to see error parameters for different clip numbers)
 
 hnoofevents=find(diff(htime)<0);%number of events recorded by human. Looking at where the difference between adjacent times is negative we can know where a new clip starts
 hnoofevents=[0;hnoofevents;length(htime)];
@@ -57,7 +65,7 @@ for i=1:(cnoofevents(clip+1)-cnoofevents(clip))
         end
     end
     if(flag==0)
-        falsepos=falsepos+1;
+        falsepos=falsepos+1/(cnoofevents(clip+1)-cnoofevents(clip));
     end
     
 end    
@@ -84,7 +92,7 @@ for i=1:(hnoofevents(clip+1)-hnoofevents(clip))
         end
     end
     if(flag==0)
-        falseneg=falseneg+1;
+        falseneg=falseneg+1/(hnoofevents(clip+1)-hnoofevents(clip));
     end
     
 end    
