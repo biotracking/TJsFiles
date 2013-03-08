@@ -5,6 +5,8 @@
 % hammingdist_var_unsorted
 % hammingdist_avg_sorted
 % hammingdist_var_sorted
+% permutation_error_avg
+% permutation_error_var
 
 
 % load('findingerrors.mat');
@@ -16,7 +18,7 @@ cname=char(importdata('compdataname.txt'));
 ctime=(importdata('compdatatime.txt'));
 cstate=(importdata('compdatastate.txt'));
 
-twindow=10;
+twindow=10;% We will consdier the events in the range of 2*twindow around the current event
 clip=2;%Clip number (Change this to see error parameters for different clip numbers)
 
 hnoofevents=find(diff(htime)<0);%number of events recorded by human. Looking at where the difference between adjacent times is negative we can know where a new clip starts
@@ -164,5 +166,48 @@ for i=1:(cnoofevents(clip+1)-cnoofevents(clip))
 end    
 hammingdist_avg_sorted=mean(hamming_error_sorted);
 hammingdist_var_sorted=var(hamming_error_sorted);
+
+%PART 4
+% loop to find average minimum distance between cname strings and
+% permutations of  hname strings
+flag=0;
+
+for i=1:(cnoofevents(clip+1)-cnoofevents(clip))
+    
+    
+    tmin=ctime(i)-twindow;
+    tmax=ctime(i)+twindow;
+    temp=find(htime<tmax);
+    temp2=find(htime>tmin);
+    temp=intersect(temp2,temp);%indexes where htime belongs to the range ctime-5 and ctime+5
+
+    if(~isempty(temp))
+        flag=flag+1;
+        permutation_error(flag)=4;%maximum distance between permutation for strings of length 4
+        temperror=0;
+        for j=1:length(temp)
+
+            if(strcmp(hstate(temp(j)),cstate(i))) % find an event where the ant name state recorded by the computer matches that recorded by the human
+                strintersect=intersect(hname(temp(j),:),cname(i,:));
+                strunique=setdiff(cname(i,:),hname(temp(j),:));
+                for k=1:length(strintersect)
+                    temperror=temperror+abs(length(find(cname(i,:)==strintersect(k)))-length(find(hname(temp(j),:)==strintersect(k))));
+                end
+                for k=1:length(strunique)
+                    temperror=temperror+length(find(cname(i,:)==strunique(k)));
+                end
+                if(temperror<permutation_error(flag))
+                    permutation_error(flag)=temperror;
+                end
+            end
+        end
+
+
+    end
+    
+
+end 
+permutation_error_avg=mean(permutation_error);
+permutation_error_var=var(permutation_error);
 
 
