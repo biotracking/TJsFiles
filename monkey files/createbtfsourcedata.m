@@ -11,7 +11,10 @@ tempmonkeybtf=[];
 
 for i=1:m
     tempmonkeytrack=evalin('base',strcat('monkey',int2str(i),'track'));
-    tempmonkeybtf=[tempmonkeybtf;tempmonkeytrack];% Combine all monkey track data for convenience. If this is done we can just sort the matrix to obtain btf format style data.
+    tempmonkeyorientation=evalin('base',strcat('monkey',int2str(i),'orientation'));
+    tempmonkeyspeed=evalin('base',strcat('monkey',int2str(i),'speed'));
+    tempmonkeyinteractingwith=evalin('base',strcat('monkey',int2str(k),'interactingwith'));
+    tempmonkeybtf=[tempmonkeybtf;tempmonkeytrack,tempmonkeyspeed,tempmonkeyorientation,tempmonkeyinteractingwith];% Combine all monkey track data including velocity and orientation for convenience. If this is done we can just sort the matrix to obtain btf format style data.
 end
 tempmonkeybtf=unique(tempmonkeybtf,'rows'); % Remove the redundant rows. Mostly caused by the presence of extra rows with id 0 at the same instant where no monkeys are present
 monkeybtf=sortrows(tempmonkeybtf,2); %Sort the combined monkey track data rows by time (column 2). 
