@@ -30,6 +30,7 @@ for i=1:m-1
         tempdist=sum((tempmonkeyitrack'-tempmonkeyjtrack').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
         y=find(tempdist<threshold); % Find the indices where the distance between the two monkeys is less than the distance threshold.
         matrixofinteraction(i,j)=matrixofinteraction(i,j)+length(y); % add the number of frames where monkey i and monkey j are interacting to the (i,j) th element of [matrixofinteraction]
+        matrixofinteraction(j,i)=matrixofinteraction(i,j);
         
         tempmonkeyjinteractingwith=evalin('base',strcat('monkey',int2str(j),'interactingwith')); 
         tempmonkeyiinteractingwith(x(y))=j; % indicate that the ith monkey is interacting with monkeyid=j at the frames given by indexes x(y)

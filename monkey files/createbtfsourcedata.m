@@ -10,12 +10,23 @@ function monkeybtf=createbtfsourcedata(monkeygroup2tag)
 tempmonkeybtf=[]; 
 
 for i=1:m
+    tempmonkeybit=[tempmonkeybit,evalin('base',strcat('monkey',int2str(i),'bit'))];
+end
+
+tempmonkeybit=sum(tempmonkeybit,2);%Sum the rows. The final array will have a value greater than zero if any monkey is present in that frame
+x=find(tempmonkeybit>0);%monkeys are present at these indices
+
+for i=1:m
     tempmonkeytrack=evalin('base',strcat('monkey',int2str(i),'track'));
     tempmonkeyorientation=evalin('base',strcat('monkey',int2str(i),'orientation'));
     tempmonkeyspeed=evalin('base',strcat('monkey',int2str(i),'speed'));
     tempmonkeyinteractingwith=evalin('base',strcat('monkey',int2str(k),'interactingwith'));
     tempmonkeybtf=[tempmonkeybtf;tempmonkeytrack,tempmonkeyspeed,tempmonkeyorientation,tempmonkeyinteractingwith];% Combine all monkey track data including velocity and orientation for convenience. If this is done we can just sort the matrix to obtain btf format style data.
+    y=find(tempmonkeybtf(:,1)==0);
+    monkeypresentbutid0=intersect(x,y);%monkey i isnt present at this instant but some other monkey is present. We remove these rows. (Else we get multiple rows with id 0 even when monkeys are present)
+    tempmonkeybtf=removerows(tempmonkeybtf,monkeypresentbutid0);
 end
+%Need to remove samples with monkeyid = 0 when monkeys are present
 tempmonkeybtf=unique(tempmonkeybtf,'rows'); % Remove the redundant rows. Mostly caused by the presence of extra rows with id 0 at the same instant where no monkeys are present
 monkeybtf=sortrows(tempmonkeybtf,2); %Sort the combined monkey track data rows by time (column 2). 
 

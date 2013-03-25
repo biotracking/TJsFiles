@@ -45,12 +45,19 @@ for i=tstart:frameinterval:tstop
     index=index+1;
 end
 
-monkeyvelocity=diff(monkeytrack(:,3:5)); % The velocity is given by the difference in position between adjacent frames.
-monkeyspeed=[0; sum((monkeyvelocity)'.^2)'];
-monkeyorientationx=[0; acosd(monkeyspeed./monkeyvelocity(:,1))];% Orientation wrt x axis (in degrees). The initial value is kept zero
-monkeyorientationy=[0; acosd(monkeyspeed./monkeyvelocity(:,2))];% Orientation wrt y axis (in degrees). The initial value is kept zero
-monkeyorientationz=[0; acosd(monkeyspeed./monkeyvelocity(:,3))];% Orientation wrt z axis (in degrees). The initial value is kept zero
+monkeyvelocity=diff(monkeytrack(:,3:5))*framerate; % The velocity is given by the difference in position between adjacent frames divided by frame interval.
+monkeyvelocity=[0 0 0; monkeyvelocity];% Add initial velocity zero
+monkeyvelocity=monkeyvelocity.*[monkeybit,monkeybit,monkeybit];%Make velocity = 0 when monkey isnt present
+monkeyvelocity=monkeyvelocity(2:length(monkeyvelocity),:);
+monkeyspeed=sum((monkeyvelocity)'.^2)'.^0.5;
+monkeyorientationx=[0; acosd(monkeyvelocity(:,1)./monkeyspeed)];% Orientation wrt x axis (in degrees). The initial value is kept zero
+x= isnan(monkeyorientationx);monkeyorientationx(x)=0; % Speed was zero here so monkeyvelocity(:,1)./monkeyspeed = 0/0 = NaN
+monkeyorientationy=[0; acosd(monkeyvelocity(:,2)./monkeyspeed)];% Orientation wrt y axis (in degrees). The initial value is kept zero
+x= isnan(monkeyorientationy);monkeyorientationy(x)=0;
+monkeyorientationz=[0; acosd(monkeyvelocity(:,3)./monkeyspeed)];% Orientation wrt z axis (in degrees). The initial value is kept zero
+x= isnan(monkeyorientationz);monkeyorientationz(x)=0;
 monkeyorientation=[monkeyorientationx,monkeyorientationy,monkeyorientationz];% Combine orientations into a single array
+monkeyspeed=[0;monkeyspeed];
 monkeyvelocity=[0 0 0; monkeyvelocity];% Add initial velocity zero
 
 
