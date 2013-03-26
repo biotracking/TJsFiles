@@ -63,6 +63,7 @@ function createvisualisation(monkeybtf,monkeygroup2tag)
                 distance=sum((center1-center2).^2).^0.5;
                 [x,y,z]=ellipsoid(center(1),center(2),center(3),distance,distance,distance,10);
                 surf(x,y,z,'FaceColor','k','FaceAlpha',0.2,'EdgeColor','none');
+                text(center(1)+distance+0.01,center(2)+distance+0.01,center(3)+distance+0.01,strcat('MONKEY ',int2str(interactorbcenters(j,1)),' INTERACTING WITH MONKEY ',int2str(interactorbcenters(j,2))));
             end
             interactorbcenters=[];
             [x,y,z]=cylinder(0.02);
