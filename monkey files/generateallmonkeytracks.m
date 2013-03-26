@@ -1,4 +1,5 @@
-function generateallmonkeytracks(tstart,tstop,monkeygroup2tag,framerate,medianfilterorder)
+function generateallmonkeytracks(tstart,tstop,monkeygroup2tag,framerate,medianfilterorder) 
+% Use this function after seperateindividualtags.m to get all monkeytrack variables
 [m,n]=size(monkeygroup2tag);
 for i=1:m
     createfilteredtagdata4monkey(i,monkeygroup2tag,framerate,medianfilterorder);
