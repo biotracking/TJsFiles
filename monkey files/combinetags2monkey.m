@@ -1,4 +1,4 @@
-function [monkeytrack,monkeyspeed,monkeyorientation,monkeybit] = combinetags2monkey(tstart,tstop,framerate,monkeyid,monkeygroup2tag)%,newtag1data,newtag2data,newtag3data,newtag4data) 
+function [monkeytrack,monkeyspeed,monkeyorientation,monkeybit] = combinetags2monkey(tstart,tstop,framerate,monkeyid,monkeygroup2tag)
 % We obtain the tags associated with monkeyid from monkeygroup2tag and
 % combine these to obtain a single track for each monkey.
 % We get tstart and tstop from the original raw combined data. If this
@@ -32,7 +32,7 @@ for i=tstart:frameinterval:tstop
     
     x=find(newtagdata(:,2)==i); % Combining the tags helps us here. In just one instruction, I can search for samples given by different tags at time instant i.
     templength=length(x); % How many tags give me samples at time instant i
-    if(isempty(x))
+    if(templength==0)
         monkeytrack(index,:)=[0,i,0,0,0]; % Monkey isnt present here. Keep id as 0 and coordinates as [0 0 0] at this time
     else
         for j=1:templength
