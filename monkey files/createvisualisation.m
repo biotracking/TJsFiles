@@ -40,7 +40,7 @@ function createvisualisation(monkeybtf,monkeygroup2tag,taillength)
             tempposbuffer(taillength,:)=evaluate(s,monkeybtf(i,3:5)')';
             assignin('caller',strcat('monkey',int2str(currentmonkey),'posbuffer'),tempposbuffer);
             line(tempposbuffer(1:taillength,1),tempposbuffer(1:taillength,2),tempposbuffer(1:taillength,3),'Color',monkeycolor(currentmonkey,1),'LineWidth',3);%construct tail
-            [x,y,z]=ellipsoid(tempposbuffer(taillength,1),tempposbuffer(taillength,2),tempposbuffer(taillength,3),monkeyradius,monkeyradius,monkeyradius,10); 
+            [x,y,z]=ellipsoid(tempposbuffer(taillength,1),tempposbuffer(taillength,2),tempposbuffer(taillength,3),monkeyradius,monkeyradius,monkeyradius,8); 
             plot3(x,y,z,monkeycolor(currentmonkey,:));% construct a sphere for the monkey
             text(tempposbuffer(taillength,1)+0.2,tempposbuffer(taillength,2)+0.2,tempposbuffer(taillength,3)+0.2,strcat('MONKEY ',int2str(currentmonkey)),'Color',monkeycolor(currentmonkey,1),'FontSize',12,'FontWeight','demi');
             [x,y,z]=cylinder(monkeyradius);
@@ -72,6 +72,12 @@ function createvisualisation(monkeybtf,monkeygroup2tag,taillength)
             [x,y,z]=cylinder(0.02);
             surf(x+mean13(1),y+mean13(2),z*4+mean13(3),'FaceColor','k','FaceAlpha',0.3,'EdgeColor','none');
             surf(x+mean15(1),y+mean15(2),z*4+mean15(3),'FaceColor','k','FaceAlpha',0.3,'EdgeColor','none');
+            [x,y,z]=ellipsoid(mean13(1),mean13(2),mean13(3),0.04,0.04,0.04,8);
+            plot3(x,y,z,'yo');
+            text(mean13(1)-0.3,mean13(2)-0.3,mean13(3)-0.2,'STATIONARY TAG 1','FontSize',12);
+            [x,y,z]=ellipsoid(mean15(1),mean15(2),mean15(3),0.04,0.04,0.04,8);
+            plot3(x,y,z,'yo');
+            text(mean15(1)-0.3,mean15(2)-0.3,mean15(3)-0.2,'STATIONARY TAG 2','FontSize',12);
             camorbit(15,15);
             
             drawnow;

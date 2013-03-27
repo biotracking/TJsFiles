@@ -1,4 +1,4 @@
-function matrixofinteraction=findmatrixofinteraction(monkeygroup2tag,threshold)
+function matrixofinteraction=findmatrixofinteraction(monkeygroup2tag,threshold,monkeyradius)
 
 % threshold - sets the distance threshold. If distance between any two
 % monkeys is less than this value then they are considered to be
@@ -30,7 +30,7 @@ for i=1:m-1
         tempmonkeyjtrack=evalin('base',strcat('monkey',int2str(j),'track(:,3:5)')); % Get the position coordinates at these indices for monkey j
         tempmonkeyjtrack=tempmonkeyjtrack(x,:);
         tempdist=sum((tempmonkeyitrack'-tempmonkeyjtrack').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
-        y=find(tempdist<threshold); % Find the indices where the distance between the two monkeys is less than the distance threshold.
+        y=find(tempdist<=threshold+2*monkeyradius); % Find the indices where the distance between the two monkeys is less than the distance threshold (not including the width of the monkey body).
         matrixofinteraction(i,j)=matrixofinteraction(i,j)+length(y); % add the number of frames where monkey i and monkey j are interacting to the (i,j) th element of [matrixofinteraction]
         matrixofinteraction(j,i)=matrixofinteraction(i,j);
         
