@@ -1,4 +1,4 @@
-function generateheatmap(monkeyid,noofhistogrambinsx,noofhistogrambinsy,cagemin,cagemax)
+function [dat,n]=generateheatmap(monkeyid,monkeybtf,noofhistogrambinsx,noofhistogrambinsy,cagemin,cagemax)
 % Program to generate a heat map that shows the frequency of visiting a
 % particular region in the cage
 %noofhistogrambinsx = number of bins used in calculating the histogram for x axis
@@ -7,15 +7,15 @@ function generateheatmap(monkeyid,noofhistogrambinsx,noofhistogrambinsy,cagemin,
 %cagemax = maximum value of cage coordinates in any direction
 %We calculate the histogram only over the range [cagemin,cagemax] 
 figure;
-dat=evalin('base',strcat('monkeybtf(find(monkeybtf(:,1)==monkeyid),3:4);'));
-n = hist3(dat,[noofhistogrambinsx,noofhistogrambinsy])/length(dat); % Extract histogram data;
+dat=monkeybtf(find(monkeybtf(:,1)==monkeyid),3:4);
+n = hist3(dat,[noofhistogrambinsx,noofhistogrambinsy]); % Extract histogram data;
 % Divide the cage area into a noofhistogrambinsx by noofhistogrambinsy
 % matrix and calculate the histogram of monkeyid's position
 n1 = n';
 n1( size(n,1) + 1 ,size(n,2) + 1 ) = 0;
 % Generate grid for 2-D projected view of intensities
-xb = linspace(cagemin,cagemax,size(n,1)+1);
-yb = linspace(cagemin,cagemax,size(n,1)+1);
+xb = linspace(min(dat(:,1)),max(dat(:,1)),size(n,1)+1);
+yb = linspace(min(dat(:,2)),max(dat(:,2)),size(n,1)+1);
 % Make a pseudocolor plot on this grid
 h = pcolor(xb,yb,n1);
 % Set the z-level and colormap of the displayed grid
