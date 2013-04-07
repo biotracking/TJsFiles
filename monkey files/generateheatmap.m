@@ -6,8 +6,8 @@ function generateheatmap(monkeyid,noofhistogrambinsx,noofhistogrambinsy,cagemin,
 %cagemin = minimum value of cage coordinates in any direction (assuming the cage is a cube) 
 %cagemax = maximum value of cage coordinates in any direction
 %We calculate the histogram only over the range [cagemin,cagemax] 
-
-dat=evalin('base',strcat('monkey',int2str(monkeyid),'track(find(monkey',int2str(monkeyid),'track(:,1)>0),3:4);'));
+figure;
+dat=evalin('base',strcat('monkeybtf(find(monkeybtf(:,1)==monkeyid),3:4);'));
 n = hist3(dat,[noofhistogrambinsx,noofhistogrambinsy])/length(dat); % Extract histogram data;
 % Divide the cage area into a noofhistogrambinsx by noofhistogrambinsy
 % matrix and calculate the histogram of monkeyid's position

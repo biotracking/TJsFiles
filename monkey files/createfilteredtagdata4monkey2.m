@@ -29,7 +29,7 @@ for i=1:q
         end
     end
 end
-
+assignin('base',strcat('newmonkey',int2str(monkeyid),'bit'),monkeybit);
 [lmonkeybit,num]=bwlabel(monkeybit,8); % Find the continuous regions where atleast one of monkeyid's tags are present
 for j=1:q
     
@@ -64,6 +64,21 @@ for j=1:q
         temp=[temptagdata(1,1)*ones(length(newtime),1),newtime',tempx,tempy,tempz]; 
         newtagdata=[newtagdata;temp];
     end
+%     tf=ismember(tscale',newtagdata(:,2));
+%     tempindex=find(tf==0);
+%     temp=zeros(length(tempindex),5);
+%     temp(:,2)=tscale(tempindex);
+%     newtagdata=[newtagdata;temp];
+%     newtagdata=sortrows(newtagdata,2);
+%     tempdiff=diff(newtagdata(:,2));
+%     a=mean(tempdiff);
+%     a=find(tempdiff<a);
+%     a1=a(find(newtagdata(a,1)==0));
+%     a2=a(find(newtagdata(a+1,1)==0))+1;
+%     newtagdata=removerows(newtagdata,[a1;a2]);
+%     tempdiff=diff(newtagdata(:,2));
+%     a=find(tempdiff<mean(tempdiff));
+%     newtagdata=removerows(newtagdata,a);
     assignin('base',strcat('newtag',int2str(monkeygroup2tag(monkeyid,j)),'data'),newtagdata);
     
 end

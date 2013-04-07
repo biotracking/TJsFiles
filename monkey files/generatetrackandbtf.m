@@ -21,6 +21,7 @@ matrixofinteraction=findmatrixofinteraction(monkeygroup2tag,threshold,monkeyradi
 monkeybtf=createbtfsourcedata(monkeygroup2tag);
 save(strcat('day',int2str(i),'matrixofinteraction.mat'),'matrixofinteraction'); % Store the generated matrixofinteraction in a .mat file
 save(strcat('day',int2str(i),'btf.mat'),'monkeybtf'); % Store the generated monkeybtf in a .mat file
+save('day',int2str(i),'.mat');
 disp(i);
 end
 

@@ -2,12 +2,15 @@ function matrixofinteraction=findmatrixofinteraction(monkeygroup2tag,threshold,m
 
 % threshold - sets the distance threshold. If distance between any two
 % monkeys is less than this value then they are considered to be
-% interacting. This program will also create a set of column vectors
+% interacting. 
+% This program will also create a set of column vectors
 % monkeykinteractingwith wich indicates the monkeyid with which monkey k
 % might be interacting with. (They are both within a certain distance given by "threshold")
+% matrixofinteraction - stores tie strength as the number of frames of interaction between any 2
+% monkeys in a data file
 
 [m,n]=size(monkeygroup2tag); % m gives the number of monkeys and n gives the number of tags. 
-matrixofinteraction=zeros(m); % Stores tie strength as the number of frames of interaction between any 2 monkeys in a data file
+matrixofinteraction=zeros(m); 
 
 tempmonkey1bit=evalin('base',strcat('monkey',int2str(1),'bit')); % Given the boolean array which indicates whether monkey i is present in a frame
 tempmonkeyiinteractingwith=zeros(size(tempmonkey1bit));
@@ -29,8 +32,8 @@ for i=1:m-1
         tempmonkeyitrack=tempmonkeyitrack(x,:);
         tempmonkeyjtrack=evalin('base',strcat('monkey',int2str(j),'track(:,3:5)')); % Get the position coordinates at these indices for monkey j
         tempmonkeyjtrack=tempmonkeyjtrack(x,:);
-        tempdist=sum((tempmonkeyitrack'-tempmonkeyjtrack').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
-        y=find(tempdist<=threshold+2*monkeyradius); % Find the indices where the distance between the two monkeys is less than the distance threshold (not including the width of the monkey body).
+        tempdist=sum((tempmonkeyitrack(:,1:2)'-tempmonkeyjtrack(:,1:2)').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
+        y=find(tempdist<=threshold+2*monkeyradius); % Find the indices where the distance on x-y plane between the two monkeys is less than the distance threshold (not including the width of the monkey body).
         matrixofinteraction(i,j)=matrixofinteraction(i,j)+length(y); % add the number of frames where monkey i and monkey j are interacting to the (i,j) th element of [matrixofinteraction]
         matrixofinteraction(j,i)=matrixofinteraction(i,j);
         
@@ -43,5 +46,5 @@ for i=1:m-1
         
     end
 end
-
+matrixofinteraction=matrixofinteraction/length(tempmonkey1bit);%Scale matrix of interaction by the total number of frames.
  

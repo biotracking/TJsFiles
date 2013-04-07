@@ -24,14 +24,24 @@ for i=1:n
     newtagdata=[newtagdata;temptagdata]; % We combine all the tags associated with monkeyid in the variable newtagdata.
 end
 
+if(~isempty(newtagdata))% If the tag wasnt present in that time interval we get an empty variable []
+    newtagdata=sortrows(newtagdata,2);
+end
+
 monkeybit=false(length(tscale),1);
 monkeytrack=zeros(length(tscale),5);
 index=1;
 
 for i=tstart:frameinterval:tstop
     
-    x=find(newtagdata(:,2)==i); % Combining the tags helps us here. In just one instruction, I can search for samples given by different tags at time instant i.
-    templength=length(x); % How many tags give me samples at time instant i
+    if(~isempty(newtagdata))
+        x=find(newtagdata(:,2)==i); % Combining the tags helps us here. In just one instruction, I can search for samples given by different tags at time instant i.
+        y=find(newtagdata(x,1)>0);
+        templength=length(y); % How many tags give me samples at time instant i
+    else
+        templength=0;
+    end
+    
     if(templength==0)
         monkeytrack(index,:)=[0,i,0,0,0]; % Monkey isnt present here. Keep id as 0 and coordinates as [0 0 0] at this time
     else
@@ -44,7 +54,19 @@ for i=tstart:frameinterval:tstop
     
     index=index+1;
 end
+newmonkeybit=evalin('base',strcat('newmonkey',int2str(monkeyid),'bit'));% After combining we will find many frames with no sample even when in the earlier stage this wasnt the case. This causes the monkey to appear to flicker in and out of existence.
+a=xor(newmonkeybit',monkeybit);% Gives the samples that are actually present (indicated by newmonkeybit) but missing after combining into a single track (indicated by monkeybit)
+x=find(a==1);
+newtime=tscale(x);
+monkeytrack=removerows(monkeytrack,x);% Remove the frames at these times. (These will be frames of type [0 time 0 0 0]). Will return the same values if still present for interpolation.
+% We fill by interpolation these missing samples at times indicated by newtime 
+tempx=interp1(monkeytrack(:,2),monkeytrack(:,3),newtime,'linear','extrap'); % Interpolate x-coordinate data.  
+tempy=interp1(monkeytrack(:,2),monkeytrack(:,4),newtime,'linear','extrap'); % Interpolate y-coordinate data
+tempz=interp1(monkeytrack(:,2),monkeytrack(:,5),newtime,'linear','extrap'); % Interpolate z-coordinate data
+monkeytrack=[monkeytrack;ones(length(newtime),1)*monkeyid,newtime',tempx',tempy',tempz'];% Append these interpolated values 
+monkeytrack=sortrows(monkeytrack,2);% and then sort the matrix by time axis
 
+monkeybit=newmonkeybit';
 monkeyvelocity=diff(monkeytrack(:,3:5))*framerate; % The velocity is given by the difference in position between adjacent frames divided by frame interval.
 monkeyvelocity=[0 0 0; monkeyvelocity];% Add initial velocity zero
 monkeyvelocity=monkeyvelocity.*[monkeybit,monkeybit,monkeybit];%Make velocity = 0 when monkey isnt present

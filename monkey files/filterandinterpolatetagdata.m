@@ -17,9 +17,9 @@ function [newtagdata,tagdata]=filterandinterpolatetagdata(tagdata,tagintervals,f
             tstart=tagdata(istart,2);tstart=tstart+1/framerate-mod(tstart,1/framerate); % Find the actual time at the index istart. Round it off to the nearest multiple of frame interval greater than itself
             tstop=tagdata(istop,2);tstop=tstop-mod(tstop,1/framerate); % Find the actual time at the index istop. Round it off to the nearest multiple of frame interval greater than itself %Will this go lower than start?
             newtime=tstart:1/framerate:tstop;newtime=newtime'; % Create an array for the new time scale starting at tstart and ending at tstop
-            tempx=interp1(tagdata(istart:istop,2),tagdata(istart:istop,3),newtime); % Interpolate x-coordinate data
-            tempy=interp1(tagdata(istart:istop,2),tagdata(istart:istop,4),newtime); % Interpolate y-coordinate data
-            tempz=interp1(tagdata(istart:istop,2),tagdata(istart:istop,5),newtime); % Interpolate z-coordinate data
+            tempx=interp1(tagdata(istart:istop,2),tagdata(istart:istop,3),newtime,'linear','extrap'); % Interpolate x-coordinate data
+            tempy=interp1(tagdata(istart:istop,2),tagdata(istart:istop,4),newtime,'linear','extrap'); % Interpolate y-coordinate data
+            tempz=interp1(tagdata(istart:istop,2),tagdata(istart:istop,5),newtime,'linear','extrap'); % Interpolate z-coordinate data
         elseif(istart==istop) % If the start and stop indexes are the same
             newtime=tagdata(istart,2)+1/framerate-mod(tagdata(istart,2),1/framerate);
             tempx=tagdata(istart,3);
