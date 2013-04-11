@@ -32,8 +32,8 @@ for i=1:m-1
         tempmonkeyitrack=tempmonkeyitrack(x,:);
         tempmonkeyjtrack=evalin('base',strcat('monkey',int2str(j),'track(:,3:5)')); % Get the position coordinates at these indices for monkey j
         tempmonkeyjtrack=tempmonkeyjtrack(x,:);
-        tempdist=sum((tempmonkeyitrack(:,1:2)'-tempmonkeyjtrack(:,1:2)').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
-        y=find(tempdist<=threshold+2*monkeyradius); % Find the indices where the distance on x-y plane between the two monkeys is less than the distance threshold (not including the width of the monkey body).
+        tempdist=sum((tempmonkeyitrack'-tempmonkeyjtrack').^2)'; % Get the euclidean distance between these two monkeys at time frames given by x
+        y=find(tempdist<=threshold+2*monkeyradius); % Find the indices where the 3-d distance between the two monkeys is less than the distance threshold (not including the width of the monkey body).
         matrixofinteraction(i,j)=matrixofinteraction(i,j)+length(y); % add the number of frames where monkey i and monkey j are interacting to the (i,j) th element of [matrixofinteraction]
         matrixofinteraction(j,i)=matrixofinteraction(i,j);
         

@@ -1,4 +1,4 @@
-function createvisualisation(monkeybtf,monkeygroup2tag,taillength)
+function createvisualisation(monkeybtf,monkeygroup2tag,threshold,taillength)
     monkeycolor=['ro';'ko';'bo';'co';'mo';'yo';'go'];
     s=saturation([0,3]);%Use this to restrict position coordinates to within this range
     monkeyradius=0.025;
@@ -56,8 +56,8 @@ function createvisualisation(monkeybtf,monkeygroup2tag,taillength)
                 center1=evalin('caller',strcat('monkey',int2str(interactorbcenters(j,1)),'posbuffer(taillength,:)'));
                 center2=evalin('caller',strcat('monkey',int2str(interactorbcenters(j,2)),'posbuffer(taillength,:)'));
                 center=(center1+center2)*0.5;
-                distance=sum((center1-center2).^2).^0.5;
-                [x,y,z]=ellipsoid(center(1),center(2),center(3),distance*0.8,distance*0.8,distance*0.8,12);
+                
+                [x,y,z]=ellipsoid(center(1),center(2),center(3),threshold*1.5,threshold*1.5,threshold*1.5,12);
                 surf(x,y,z,'FaceColor','k','FaceAlpha',0.2,'EdgeColor','none');
                 text(4,4,4-0.5*interactorbcenters(j,1)-0.5*interactorbcenters(j,2),strcat('MONKEY ',int2str(interactorbcenters(j,1)),' INTERACTING WITH MONKEY ',int2str(interactorbcenters(j,2))),'FontSize',14,'FontWeight','bold');
             end
@@ -78,8 +78,8 @@ function createvisualisation(monkeybtf,monkeygroup2tag,taillength)
             [x,y,z]=ellipsoid(mean15(1),mean15(2),mean15(3),0.04,0.04,0.04,6);
             plot3(x,y,z,'yo');
             text(mean15(1)-0.3,mean15(2)-0.3,mean15(3)-0.2,'STATIONARY TAG 2','FontSize',12);
-                    
-            camorbit(15,10);
+            axis equal;
+            camorbit(20,5);
             drawnow;
             framenumber=framenumber+1;
             hold off;
