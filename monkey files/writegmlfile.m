@@ -1,4 +1,4 @@
-function writegmlfile(matrixofinteraction,filename)
+function writegmlfile(day,matrixofinteraction)
 % This function is used to write the .gml files that can be read by Gephi (graph creation software)
 % It has a format as given below - 
 %
@@ -45,5 +45,4 @@ for i=1:m-1
     
 end
 writethis=strvcat(writethis,']');
-dlmwrite(filename,writethis,'');
-%'day',int2str(day),'edges.txt'
+dlmwrite(strcat('day',int2str(day),'ties.gml'),writethis,'');
