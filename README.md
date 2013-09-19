@@ -31,6 +31,11 @@ three .mat files : {"prefix",daynumber}.mat (This contains the entire matlab wor
 {"prefix",daynumber,"btf"}.mat (This contains only the btf data in matlab matrix format, can be loaded directly into matlab),
 {"prefix",daynumber,"matrixofinteraction"}.mat (This contains only the matrix of interaction)
 
+The btf matrix in Matlab has the following columns
+
+TAG NUMBER, UNIX TIMESTAMP, X-COORDINATE, Y-COORDINATE, Z-COORDINATE, SPEED, X-ORIENTATION, Y-ORIENTATION, Z-ORIENTATION, NEIGHBOURING MONKEY (ONLY ONE SELECTED)
+
+
 3. Use "generateheatmap.m" to get the heatmaps as .png images in the current directory (Format can be changed within the program). 
 4. "createvisualization.m" is used to generate a video on matlab. (Usually use camtasia/jing screen capture to generate .mp4 files)
 5. "convertmatrix2btf.m" to get btf files for individual days in a user input folder
